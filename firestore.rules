@@ -1,0 +1,76 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // 0. Default Deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // --- Helpers ---
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    // Safely check for data fields
+    function data(doc) {
+      return doc.data;
+    }
+
+    // --- User Profiles ---
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow create: if isOwner(userId);
+      allow update: if isOwner(userId);
+    }
+
+    // Reusable list rule for user-owned collections
+    function isUserOwned(doc) {
+      return isSignedIn() && doc.data.userId == request.auth.uid;
+    }
+
+    // --- Diagnostic Scans ---
+    match /scans/{scanId} {
+      allow get: if isOwner(resource.data.userId);
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if isOwner(resource.data.userId);
+    }
+
+    // --- Family History ---
+    match /familyHistory/{id} {
+      allow read: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow write: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+    }
+
+    // --- Vaccinations ---
+    match /vaccinations/{id} {
+      allow read: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow write: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+    }
+
+    // --- Vitals ---
+    match /vitals/{id} {
+      allow read: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow write: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+    }
+
+    // --- Lab Reports ---
+    match /labReports/{id} {
+      allow get: if isOwner(resource.data.userId);
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow write: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+    }
+
+    // --- Appointments ---
+    match /appointments/{id} {
+      allow read: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow write: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+    }
+  }
+}

@@ -1,144 +1,119 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=DM+Sans:wght@400;500;700&family=Syne:wght@400;700&family=JetBrains+Mono:wght@400;700&display=swap');
+@import "leaflet/dist/leaflet.css";
 
 @theme {
-  --font-mono: 'JetBrains Mono', 'Courier New', Courier, monospace;
+  --color-navy: #040D1A;
+  --color-medical-teal: #00FFD1;
+  --color-medical-blue: #0066FF;
+  --color-medical-red: #FF4D6D;
+  --color-medical-border: rgba(0, 255, 209, 0.15);
+  --color-medical-glass: rgba(0, 255, 209, 0.04);
+  
+  --font-hero: "Orbitron", sans-serif;
+  --font-body: "DM Sans", sans-serif;
+  --font-heading: "Syne", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
 }
 
-:root {
-  --bg: #0a0a0a;
-  --green: #00ff41;
-  --red: #ff4444;
-  --amber: #ffaa00;
-  --dim-green: rgba(0, 255, 65, 0.2);
-  --f-mono: 'Courier New', Courier, monospace;
+@layer base {
+  body {
+    @apply bg-navy text-white font-body selection:bg-medical-teal selection:text-navy overflow-hidden;
+    cursor: crosshair;
+  }
+
+  h1, h2, h3, h4, .font-orbitron {
+    @apply font-hero tracking-tighter;
+  }
 }
 
-body {
-  background-color: var(--bg);
-  color: var(--green);
-  font-family: var(--f-mono);
-  margin: 0;
-  overflow: hidden;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@layer components {
+  .glass-panel {
+    @apply bg-medical-glass backdrop-blur-[20px] border border-medical-border shadow-[0_0_15px_rgba(0,255,209,0.05)];
+  }
+
+  .glow-border {
+    @apply border-medical-teal/30 shadow-[0_0_20px_rgba(0,255,209,0.2)];
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-medical-teal via-cyan-400 to-white;
+  }
+
+  .meta-label {
+    @apply text-[10px] font-mono uppercase tracking-[0.2em] text-slate-500;
+  }
+
+  .btn-medical {
+    @apply relative overflow-hidden px-8 py-3 bg-medical-teal text-navy font-bold uppercase tracking-widest text-[10px] 
+           hover:shadow-[0_0_30px_rgba(0,255,209,0.5)] transition-all active:scale-95 flex items-center justify-center gap-2;
+  }
+
+  .btn-medical-outline {
+    @apply relative overflow-hidden px-8 py-3 border border-medical-teal/30 text-medical-teal font-bold uppercase tracking-widest text-[10px] 
+           hover:bg-medical-teal/10 transition-all active:scale-95 flex items-center justify-center gap-2;
+  }
+
+  .btn-aesthetic-login {
+    @apply relative overflow-hidden px-12 py-5 bg-medical-blue text-white font-hero uppercase tracking-[0.3em] text-[11px]
+           shadow-[0_0_25px_rgba(0,102,255,0.5)] transition-all hover:bg-white hover:text-medical-blue 
+           hover:shadow-[0_0_50px_rgba(0,102,255,0.8)] active:scale-95 flex items-center justify-center gap-4 rounded-full;
+  }
+
+  .card-lift {
+    @apply transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(0,255,209,0.3)];
+  }
 }
 
-/* CRT Scanline Effect */
-.crt-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: linear-gradient(
-    rgba(18, 16, 16, 0) 50%,
-    rgba(0, 0, 0, 0.1) 50%
-  ),
-  linear-gradient(
-    90deg,
-    rgba(255, 0, 0, 0.01),
-    rgba(0, 255, 0, 0.01),
-    rgba(0, 0, 255, 0.01)
-  );
-  background-size: 100% 2px, 3px 100%;
-  pointer-events: none;
-  z-index: 9999;
+@layer utilities {
+  .bg-particle-grid {
+    background-image: radial-gradient(rgba(0, 255, 209, 0.1) 1px, transparent 1px);
+    background-size: 30px 30px;
+  }
+
+  .scanline-overlay {
+    @apply fixed inset-0 pointer-events-none z-[1000] opacity-[0.02];
+    background: linear-gradient(rgba(0, 255, 209, 0.1) 50%, transparent 50%);
+    background-size: 100% 4px;
+    animation: scanmove 15s linear infinite;
+  }
+
+  .light-bloom {
+    @apply absolute w-[800px] h-[800px] bg-medical-teal/10 blur-[120px] rounded-full pointer-events-none;
+  }
+  
+  .circuit-corner {
+    @apply absolute w-48 h-48 pointer-events-none opacity-[0.05] stroke-medical-teal fill-none;
+  }
+  
+  .typewriter {
+    overflow: hidden;
+    white-space: nowrap;
+    border-right: 2px solid #00FFD1;
+    animation: typing 2s steps(40, end), blink-caret 0.75s step-end infinite;
+  }
 }
 
-/* Bliinking cursor animation */
-.blink {
-  animation: blink 1s step-end infinite;
+@keyframes scanmove {
+  from { background-position: 0 0; }
+  to { background-position: 0 100%; }
 }
 
-@keyframes blink {
-  50% { opacity: 0; }
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
 }
 
-.cursor-blink {
-  display: inline-block;
-  width: 8px;
-  height: 1.2em;
-  background-color: var(--green);
-  vertical-align: middle;
-  margin-left: 2px;
-  animation: blink 1s step-end infinite;
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: #00FFD1 }
 }
 
-/* Scrollbar styling for terminal look */
-::-webkit-scrollbar {
-  width: 4px;
+@keyframes pulse-ring {
+  0% { stroke-dashoffset: 283; }
+  100% { stroke-dashoffset: 0; }
 }
 
-::-webkit-scrollbar-track {
-  background: #000;
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--dim-green);
-  border-radius: 2px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--green);
-}
-
-.terminal-border {
-  border: 1px solid var(--green);
-  box-shadow: 0 0 20px rgba(0, 255, 65, 0.1);
-}
-
-.terminal-border-glow {
-  border: 1px solid var(--green);
-  box-shadow: 0 0 10px rgba(0, 255, 65, 0.4);
-}
-
-.scanline {
-  width: 100%;
-  height: 100px;
-  z-index: 10;
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(0, 0, 0, 0) 100%);
-  opacity: 0.1;
-  position: absolute;
-  bottom: 100%;
-  animation: scanline 6s linear infinite;
-}
-
-@keyframes scanline {
-  0% { bottom: 100%; }
-  80% { bottom: 100%; }
-  100% { bottom: -100px; }
-}
-
-@keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-.animate-marquee {
-  animation: marquee 30s linear infinite;
-}
-
-.terminal-border-glow-red {
-  border: 1px solid var(--red);
-  box-shadow: 0 0 10px rgba(255, 68, 68, 0.4);
-  animation: pulse-glow-red 2s infinite ease-in-out;
-}
-
-.terminal-border-glow-amber {
-  border: 1px solid var(--amber);
-  box-shadow: 0 0 10px rgba(255, 170, 0, 0.4);
-}
-
-@keyframes pulse-glow-red {
-  0%, 100% { box-shadow: 0 0 5px rgba(255, 68, 68, 0.2); }
-  50% { box-shadow: 0 0 15px rgba(255, 68, 68, 0.6); }
-}
-
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+.animate-pulse-ring {
+  animation: pulse-ring 1s ease-out forwards;
 }

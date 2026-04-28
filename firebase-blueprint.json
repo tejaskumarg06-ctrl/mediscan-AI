@@ -1,0 +1,143 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "Stores patient onboarding information and health background.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "name": { "type": "string" },
+        "age": { "type": "integer" },
+        "bloodGroup": { "type": "string" },
+        "dob": { "type": "string" },
+        "gender": { "type": "string" },
+        "photoUrl": { "type": "string" },
+        "existingConditions": { "type": "array", "items": { "type": "string" } },
+        "allergies": { "type": "array", "items": { "type": "string" } },
+        "medications": { "type": "array", "items": { "type": "string" } },
+        "pastSurgeries": { "type": "array", "items": { "type": "string" } },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "name", "age"]
+    },
+    "FamilyHistory": {
+      "title": "Family History",
+      "description": "Hereditary conditions per family member.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "relative": { "type": "string" },
+        "condition": { "type": "string" }
+      },
+      "required": ["userId", "relative", "condition"]
+    },
+    "Vaccination": {
+      "title": "Vaccination",
+      "description": "Vaccination record for the patient.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "vaccineName": { "type": "string" },
+        "date": { "type": "string", "format": "date" },
+        "nextDue": { "type": "string", "format": "date" }
+      },
+      "required": ["userId", "vaccineName", "date"]
+    },
+    "VitalRecord": {
+      "title": "Vital Record",
+      "description": "Logs for blood pressure, sugar, weight, etc.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "type": { "type": "string", "enum": ["bp_systolic", "bp_diastolic", "heart_rate", "blood_sugar", "weight", "bmi"] },
+        "value": { "type": "number" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "type", "value", "timestamp"]
+    },
+    "LabReport": {
+      "title": "Lab Report",
+      "description": "Stores clinical lab reports and AI analysis.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "labName": { "type": "string" },
+        "date": { "type": "string", "format": "date" },
+        "category": { "type": "string", "enum": ["blood", "urine", "mri_ct", "eye_pressure", "audiometry", "allergy", "other"] },
+        "status": { "type": "string", "enum": ["normal", "abnormal", "pending"] },
+        "fileUrl": { "type": "string" },
+        "extractedText": { "type": "string" },
+        "aiSummary": { "type": "string" },
+        "highlights": { "type": "array", "items": { "type": "string" } },
+        "notes": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "title", "labName", "date", "category", "status", "fileUrl"]
+    },
+    "Appointment": {
+      "title": "Appointment",
+      "description": "Booked appointments at clinics.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "clinicId": { "type": "string" },
+        "clinicName": { "type": "string" },
+        "doctorName": { "type": "string" },
+        "date": { "type": "string", "format": "date" },
+        "timeSlot": { "type": "string" },
+        "reason": { "type": "string" },
+        "status": { "type": "string", "enum": ["scheduled", "completed", "cancelled"] },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "clinicId", "clinicName", "doctorName", "date", "timeSlot"]
+    },
+    "DiagnosticScan": {
+      "title": "Diagnostic Scan",
+      "description": "Stores results from eye, ear, hearing, or vision tests.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "type": { "type": "string", "enum": ["eye", "ear", "hearing", "vision"] },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "imageUrl": { "type": "string" },
+        "results": { "type": "object" },
+        "confidenceScore": { "type": "number" },
+        "severity": { "type": "string", "enum": ["low", "medium", "high"] },
+        "summary": { "type": "string" },
+        "recommendations": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["userId", "type", "timestamp", "results"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User profile documents."
+    },
+    "/familyHistory/{id}": {
+      "schema": "FamilyHistory",
+      "description": "Family medical history."
+    },
+    "/vaccinations/{id}": {
+      "schema": "Vaccination",
+      "description": "Vaccination records."
+    },
+    "/vitals/{id}": {
+      "schema": "VitalRecord",
+      "description": "Patient vital logs."
+    },
+    "/labReports/{id}": {
+      "schema": "LabReport",
+      "description": "Medical lab reports."
+    },
+    "/appointments/{id}": {
+      "schema": "Appointment",
+      "description": "Booked appointments."
+    },
+    "/scans/{scanId}": {
+      "schema": "DiagnosticScan",
+      "description": "Diagnostic scan results."
+    }
+  }
+}

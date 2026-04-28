@@ -1,6 +1,9 @@
 {
-  "name": "Apex Macro Terminal",
-  "description": "A high-density macroeconomic dashboard with a Bloomberg-inspired terminal aesthetic, providing real-time-style insights into global markets, yields, and economic regimes.",
-  "requestFramePermissions": [],
+  "name": "MediScan AI",
+  "description": "AI-powered medical diagnostic platform for eye, ear, and vision assessments with advanced diagnostic imaging and hearing tests.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ],
   "majorCapabilities": []
 }

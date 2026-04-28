@@ -1,75 +1,109 @@
-export type TabType = 'SCANNER' | 'DIAGNOSIS' | 'VITALS' | 'HISTORY' | 'AI_ANALYST';
-
-export interface MarketIndex {
-  symbol: string;
+export interface UserProfile {
+  uid: string;
   name: string;
-  price: number;
-  change: number;
-  changePercent: number;
-  high52: number;
-  low52: number;
+  age: number;
+  bloodGroup?: string;
+  dob?: string;
+  gender?: string;
+  photoUrl?: string;
+  existingConditions: string[];
+  allergies?: string[];
+  medications?: string[];
+  pastSurgeries?: string[];
+  createdAt: string;
 }
 
-export interface EconomicEvent {
+export interface FamilyHistory {
+  id?: string;
+  userId: string;
+  relative: string;
+  condition: string;
+}
+
+export interface Vaccination {
+  id?: string;
+  userId: string;
+  vaccineName: string;
   date: string;
-  event: string;
-  importance: 'HIGH' | 'MEDIUM' | 'LOW';
-  impact?: string;
+  nextDue: string;
 }
 
-export interface FOMCMeeting {
-  date: string;
-  hold: number;
-  cut: number;
-  hike: number;
-}
-
-export interface SurpriseData {
-  month: string;
-  estimate: number;
-  actual: number;
-  surprise: number;
-}
-
-export interface ChartDataPoint {
-  label: string;
+export interface VitalRecord {
+  id?: string;
+  userId: string;
+  type: 'bp_systolic' | 'bp_diastolic' | 'heart_rate' | 'blood_sugar' | 'weight' | 'bmi';
   value: number;
+  timestamp: string;
 }
 
-export interface YieldCurvePoint {
-  maturity: string;
-  current: number;
-  oneMonthAgo: number;
-  oneYearAgo: number;
-}
-
-export interface RiskHeatmapCell {
-  name: string;
-  level: string;
-  score: number;
-  trend: 'worsening' | 'improving' | 'stable';
-  description: string;
-}
-
-export interface TailRiskScenario {
-  scenario: string;
-  probability: number;
-  impact: string;
-  trigger: string;
-}
-
-export interface RiskEvent {
+export interface LabReport {
+  id?: string;
+  userId: string;
+  title: string;
+  labName: string;
   date: string;
-  event: string;
-  level: 'HIGH' | 'MEDIUM' | 'LOW';
-  impact: string;
+  category: 'blood' | 'urine' | 'mri_ct' | 'eye_pressure' | 'audiometry' | 'allergy' | 'other';
+  status: 'normal' | 'abnormal' | 'pending';
+  fileUrl: string;
+  extractedText?: string;
+  aiSummary?: string;
+  highlights?: string[];
+  notes?: string;
+  timestamp: string;
 }
 
-export interface ContagionCountry {
+export interface Clinic {
+  id: string;
   name: string;
-  flag: string;
-  score: number;
-  equityChange: number;
-  currencyVsUsd: number;
-  cdsSpread: number;
+  specialty: string[];
+  rating: number;
+  address: string;
+  phone: string;
+  website: string;
+  hours: Record<string, string>;
+  doctors: Array<{
+    name: string;
+    photo: string;
+    specialty: string;
+    qualification: string;
+  }>;
+  insuranceAccepted: string[];
+  coordinates: { lat: number; lng: number };
+  photoUrl: string;
+  hasTelemedicine: boolean;
+}
+
+export interface Appointment {
+  id?: string;
+  userId: string;
+  clinicId: string;
+  clinicName: string;
+  doctorName: string;
+  date: string;
+  timeSlot: string;
+  reason: string;
+  status: 'scheduled' | 'completed' | 'cancelled';
+  timestamp: string;
+}
+
+export type ScanType = 'eye' | 'ear' | 'hearing' | 'vision';
+export type Severity = 'low' | 'medium' | 'high';
+
+export interface DiagnosticScan {
+  id?: string;
+  userId: string;
+  type: ScanType;
+  timestamp: string;
+  imageUrl?: string;
+  results: any;
+  confidenceScore?: number;
+  severity?: Severity;
+  summary: string;
+  recommendations: string[];
+}
+
+export interface AudiogramData {
+  frequency: number;
+  dB: number;
+  ear: 'left' | 'right';
 }
