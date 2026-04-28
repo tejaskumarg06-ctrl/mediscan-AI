@@ -12,6 +12,7 @@ import { InflationTab } from './components/InflationTab';
 import { GrowthTab } from './components/GrowthTab';
 import { LaborTab } from './components/LaborTab';
 import { RiskTab } from './components/RiskTab';
+import { AIAnalystTab } from './components/AIAnalystTab';
 import { PlaceholderTab } from './components/PlaceholderTab';
 import { TabType } from './types';
 import { motion, AnimatePresence } from 'motion/react';
@@ -23,6 +24,7 @@ const TABS: { id: TabType; label: string }[] = [
   { id: 'GROWTH', label: 'GROWTH' },
   { id: 'LABOR', label: 'LABOR' },
   { id: 'RISK', label: 'RISK' },
+  { id: 'AI_ANALYST', label: 'AI ANALYST' },
 ];
 
 export default function App() {
@@ -42,6 +44,8 @@ export default function App() {
         return <LaborTab key="labor" />;
       case 'RISK':
         return <RiskTab key="risk" />;
+      case 'AI_ANALYST':
+        return <AIAnalystTab key="ai-analyst" />;
       default:
         return <PlaceholderTab key={activeTab} title={activeTab} />;
     }

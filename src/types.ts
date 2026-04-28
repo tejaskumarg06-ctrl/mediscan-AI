@@ -1,4 +1,4 @@
-export type TabType = 'OVERVIEW' | 'RATES' | 'INFLATION' | 'GROWTH' | 'LABOR' | 'RISK';
+export type TabType = 'OVERVIEW' | 'RATES' | 'INFLATION' | 'GROWTH' | 'LABOR' | 'RISK' | 'AI_ANALYST';
 
 export interface MarketIndex {
   symbol: string;
