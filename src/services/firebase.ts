@@ -3,12 +3,24 @@ import { getAuth } from 'firebase/auth';
 import { initializeFirestore, doc, getDocFromServer } from 'firebase/firestore';
 import firebaseConfig from '../../firebase-applet-config.json';
 
-const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
+let app;
+try {
+  app = initializeApp(firebaseConfig);
+} catch (error) {
+  console.error("Firebase initializeApp error:", error);
+}
 
-// Use initializeFirestore with settings to handle restrictive network environments (like iframes)
-export const db = initializeFirestore(app, {
-}, firebaseConfig.firestoreDatabaseId);
+export const auth = app ? getAuth(app) : null as any;
+
+let firestore;
+try {
+  firestore = initializeFirestore(app as any, {
+  }, firebaseConfig.firestoreDatabaseId);
+} catch (error) {
+  console.error("Firebase initializeFirestore error:", error);
+}
+
+export const db = firestore as any;
 
 /**
  * Validates connection to Firestore with a timeout.
