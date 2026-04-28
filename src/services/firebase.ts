@@ -8,7 +8,6 @@ export const auth = getAuth(app);
 
 // Use initializeFirestore with settings to handle restrictive network environments (like iframes)
 export const db = initializeFirestore(app, {
-  experimentalForceLongPolling: true,
 }, firebaseConfig.firestoreDatabaseId);
 
 /**

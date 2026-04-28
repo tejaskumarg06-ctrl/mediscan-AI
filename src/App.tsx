@@ -73,7 +73,16 @@ export default function App() {
       }
       setLoading(false);
     });
-    return () => unsubscribe();
+    
+    // Safety timeout for loading state
+    const timeout = setTimeout(() => {
+      setLoading(false);
+    }, 5000);
+
+    return () => {
+      unsubscribe();
+      clearTimeout(timeout);
+    };
   }, [view]);
 
   useEffect(() => {
