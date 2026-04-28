@@ -8,6 +8,20 @@
   <body>
     <div id="root"></div>
     <script type="module" src="./src/main.tsx"></script>
+    <script>
+      window.onerror = function(msg, url, lineNo, columnNo, error) {
+        var div = document.createElement('div');
+        div.style.position = 'fixed';
+        div.style.top = '0';
+        div.style.left = '0';
+        div.style.background = 'red';
+        div.style.color = 'white';
+        div.style.padding = '10px';
+        div.style.zIndex = '9999';
+        div.innerText = 'ERROR: ' + msg + ' at ' + lineNo + ':' + columnNo;
+        document.body.appendChild(div);
+      };
+    </script>
   </body>
 </html>
 

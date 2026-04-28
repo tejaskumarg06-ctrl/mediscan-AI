@@ -3,9 +3,9 @@ import { onAuthStateChanged, User, signOut } from 'firebase/auth';
 import { collection, query, where, onSnapshot, limit } from 'firebase/firestore';
 import { auth, db } from './services/firebase';
 
-const LandingPage = lazy(() => import('./components/LandingPage'));
-const Auth = lazy(() => import('./components/Auth'));
-const Dashboard = lazy(() => import('./components/Dashboard'));
+import LandingPage from './components/LandingPage';
+import Auth from './components/Auth';
+import Dashboard from './components/Dashboard';
 const EyeModule = lazy(() => import('./components/EyeModule'));
 const EarModule = lazy(() => import('./components/EarModule'));
 const HearingModule = lazy(() => import('./components/HearingModule'));
