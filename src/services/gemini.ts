@@ -1,6 +1,10 @@
+import { GoogleGenAI } from "@google/genai";
 import firebaseConfig from '../../firebase-applet-config.json';
 
-const apiKey = process.env.GEMINI_API_KEY || firebaseConfig.apiKey;
+const apiKey = (typeof process !== 'undefined' && process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY !== 'undefined') 
+  ? process.env.GEMINI_API_KEY 
+  : firebaseConfig.apiKey;
+
 const ai = new GoogleGenAI({ apiKey });
 
 export async function getARIAFeedback(userMessage: string, patientContext: any, inputMode: 'voice' | 'text' = 'voice') {
